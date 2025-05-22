@@ -1,6 +1,5 @@
 #setting up s simple server
 
-from typing import Union
 
 from fastapi import FastAPI # type: ignore
 
@@ -11,7 +10,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"Hello World, This is a time display lightweight app"}
 
 
 @app.get("/time")
