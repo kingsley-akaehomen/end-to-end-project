@@ -22,3 +22,6 @@ This is a simple Python applicatiom that displays the current date and time.
 
  Start sever with the command inside the docker container
   uvicorn time-api:app --host=0.0.0.0   (host=0.0.0.0 means default to outside of containers)
+
+ Use the docker 'compose command' below to build the image, start the container map the container pots to host ports
+  docker compose up
