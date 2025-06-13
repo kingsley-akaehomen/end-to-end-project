@@ -6,6 +6,8 @@ name: Docker Build and Push
 on:
   push:
     branches: [ "main" ]
+     # Also trigger the workflow on pushes of tags that look like versions (e.g., v1.0, v1.2.3)
+    tags: [ 'v*.*.*' ]
 
 jobs:
   build-and-push:
