@@ -1,17 +1,20 @@
-#setting up s simple server
-
-
-from fastapi import FastAPI # type: ignore
-from fastapi import FastAPI # type: ignore
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession # type: ignore
-from sqlalchemy.orm import sessionmaker, declarative_base # type: ignore
-from sqlalchemy import Column, Integer, DateTime # type: ignore
+from fastapi import FastAPI  # type: ignore
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession  # type: ignore
+from sqlalchemy.orm import sessionmaker, declarative_base  # type: ignore
+from sqlalchemy import Column, Integer, DateTime, select  # type: ignore
 from datetime import datetime, timezone
 import time
 import os
 from contextlib import asynccontextmanager
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+# Build DATABASE_URL from separate env vars
+POSTGRES_USER = os.getenv("POSTGRES_USER")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+POSTGRES_DB = os.getenv("POSTGRES_DB")
+POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")
+
+DATABASE_URL = f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
 # Create async engine and session
 engine = create_async_engine(DATABASE_URL, echo=True)
@@ -47,9 +50,9 @@ async def index():
 @app.get("/visits")
 async def get_visits():
     async with SessionLocal() as session:
-        result = await session.execute(Visit.__table__.select().order_by(Visit.accessed_at.desc()))
-        visits = result.fetchall()
-        return [{"id": row.id, "accessed_at": row.accessed_at.isoformat()} for row in visits]
+        result = await session.execute(select(Visit).order_by(Visit.accessed_at.desc()))
+        visits = result.scalars().all()
+        return [{"id": v.id, "accessed_at": v.accessed_at.isoformat()} for v in visits]
 
 @app.get("/time")
 def read_time():

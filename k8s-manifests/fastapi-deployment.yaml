@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-timeapi-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-timeapi
+  template:
+    metadata:
+      labels:
+        app: my-timeapi
+    spec:
+      containers:
+        - name: my-timeapi-container
+          image: akaehomen321/time-api-app:main
+          ports:
+            - containerPort: 8000
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_HOST
+              value: "postgres-service"
+            - name: POSTGRES_PORT
+              value: "5432"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-timeapi-service
+spec:
+  selector:
+    app: my-timeapi
+  ports:
+    - port: 8000
+      targetPort: 8000
+      nodePort: 30080
+  type: NodePort
