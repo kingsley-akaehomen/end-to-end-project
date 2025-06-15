@@ -23,6 +23,8 @@ DATABASE_URL = (
     f"@{db_host}:{db_port}/{db_name}"
 )
 
+print(f"Using DATABASE_URL: {DATABASE_URL}")
+
 # Create async engine and session
 engine = create_async_engine(DATABASE_URL, echo=True)
 Base = declarative_base()
