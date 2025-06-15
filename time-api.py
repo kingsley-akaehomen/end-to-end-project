@@ -6,15 +6,22 @@ from datetime import datetime, timezone
 import time
 import os
 from contextlib import asynccontextmanager
+from urllib.parse import quote_plus
 
 # Build DATABASE_URL from separate env vars
-POSTGRES_USER = os.getenv("POSTGRES_USER")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-POSTGRES_DB = os.getenv("POSTGRES_DB")
-POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")
-POSTGRES_PORT = os.getenv("POSTGRES_PORT", "5432")
+db_user = os.getenv("POSTGRES_USER")
+db_password = os.getenv("POSTGRES_PASSWORD")
+db_name = os.getenv("POSTGRES_DB")
+db_host = os.getenv("POSTGRES_HOST", "localhost")
+db_port = os.getenv("POSTGRES_PORT", "5432")
 
-DATABASE_URL = f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
+if not all([db_user, db_password, db_name]):
+    raise ValueError("Missing one or more required environment variables for DB connection.")
+
+DATABASE_URL = (
+    f"postgresql+asyncpg://{quote_plus(db_user)}:{quote_plus(db_password)}"
+    f"@{db_host}:{db_port}/{db_name}"
+)
 
 # Create async engine and session
 engine = create_async_engine(DATABASE_URL, echo=True)
