@@ -15,6 +15,7 @@ db_name = os.getenv("POSTGRES_DB")
 db_host = os.getenv("POSTGRES_HOST", "localhost")
 db_port = os.getenv("POSTGRES_PORT", "5432")
 
+
 if not all([db_user, db_password, db_name]):
     raise ValueError("Missing one or more required environment variables for DB connection.")
 
@@ -23,7 +24,6 @@ DATABASE_URL = (
     f"@{db_host}:{db_port}/{db_name}"
 )
 
-print(f"Using DATABASE_URL: {DATABASE_URL}")
 
 # Create async engine and session
 engine = create_async_engine(DATABASE_URL, echo=True)

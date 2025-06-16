@@ -37,7 +37,12 @@ spec:
               value: "postgres-service"
             - name: POSTGRES_PORT
               value: "5432"
-                      
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret 
+                  key: DATABASE_URL
+
 ---
 apiVersion: v1
 kind: Service
