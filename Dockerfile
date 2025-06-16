@@ -35,4 +35,4 @@ USER appuser
 
 # Command to run the application
 # Note: --reload is typically for development. For production, you might remove
-CMD ["uvicorn", "time-api:app", "--host=0.0.0.0", "--port=8000", "--reload"]
+CMD ["uvicorn", "time-api:app", "--host=0.0.0.0", "--port=8000"]
