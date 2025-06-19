@@ -17,6 +17,13 @@ spec:
           image: akaehomen321/time-api-app:main
           ports:
             - containerPort: 8000
+          resources:
+            requests:
+              cpu: "100m"      # Request 1/10th of a CPU core
+              memory: "128Mi"  # Request 128 Mebibytes of RAM
+            limits:
+              cpu: "250m"      # Limit to 1/4th of a CPU core
+              memory: "256Mi"  # Limit to 256 Mebibytes of RAM  
           env:
             - name: POSTGRES_USER
               valueFrom:
