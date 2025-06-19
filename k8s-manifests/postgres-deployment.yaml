@@ -37,8 +37,9 @@ spec:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
       volumes:
-        - name: postgres-data
-          emptyDir: {}  # Use a PVC here for persistence
+        - name: postgres-data # name for this volume inside the pod
+          persistentVolumeClaim:
+            claimName: postgres-pvc # name of the PVC created in postgres-pvc.yaml
 ---
 apiVersion: v1
 kind: Service
