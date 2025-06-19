@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc 
+spec:
+  # accessModes determines how the volume can be mounted.
+  # ReadWriteOnce means it can be mounted as read-write by a single Node.
+  # This is perfect for a single-replica database.
+  accessModes:
+    - ReadWriteOnce
+  # resources.requests.storage is how much disk space we are requesting.
+  resources:
+    requests:
+      storage: 1Gi 
