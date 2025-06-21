@@ -54,7 +54,7 @@ async def index():
         new_visit = Visit()
         session.add(new_visit)
         await session.commit()
-    return {"Message": "Hello world, FastAPI with Docker compose and PostgreSQL"}
+    return {"Message": "Hello world, FastAPI with Kubernetes"}
 
 @app.get("/visits")
 async def get_visits():
