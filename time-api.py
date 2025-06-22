@@ -54,7 +54,7 @@ async def index():
         new_visit = Visit()
         session.add(new_visit)
         await session.commit()
-    return {"Message": "Hello world, FastAPI with Kubernetes"}
+    return {"Message": "Hello world, welcome to FastAPI Application in Kubernetes"}
 
 @app.get("/visits")
 async def get_visits():

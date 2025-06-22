@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres-deployment
+  namespace: time-api-app
+# This deployment will manage the PostgreSQL database for the FastAPI application.
 spec:
   replicas: 1
   selector:
@@ -52,6 +54,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres-service
+  namespace: time-api-app
+# This service will expose the PostgreSQL database to other pods in the same namespace.
+# It allows the FastAPI application to connect to the database using a stable endpoint.
 spec:
   selector:
     app: postgres

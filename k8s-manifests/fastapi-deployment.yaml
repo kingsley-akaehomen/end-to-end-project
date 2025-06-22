@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-timeapi-deployment
+  namespace: time-api-app
 spec:
   replicas: 2
   selector:
@@ -71,6 +72,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: my-timeapi-service
+  namespace: time-api-app
 spec:
   selector:
     app: my-timeapi
