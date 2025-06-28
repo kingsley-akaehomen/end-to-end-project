@@ -15,41 +15,60 @@ This project contains a simple Python web application that displays current date
 Helm is a package manager for Kubernetes. Helm does the exact same thing for Kubernetes applications. This  FastAPI project consists of multiple Kubernetes resources (Deployments, Services, Secrets, PVCs). Helm bundles all of these into a single, manageable package called a Chart. 
 
 ### 🔧 Understanding `deployment.yaml`
-When you run (helm create), Helm generates a default deployment.yaml under templates/. This file defines how the FastAPI app will   be   deployed to Kubernetes. Here’s a breakdown of key templating directives and how Helm uses them:
+When you run (helm create), Helm generates a default `deployment.yaml` under `templates/`. This file defines how the FastAPI app will   be   deployed to Kubernetes. 
 
-{{ include "chart.name" . }}
-   Useful for consistent naming across templates.
+Here’s a breakdown of key templating directives and how Helm uses them:
 
-{{ .Values.replicaCount }}
-   Reads the number of pod replicas from values.yaml.
-   Used in the .spec.replicas field of the Deployment.
+---
 
-{{ .Values.image.repository }}
-   Sets the container image repo from values.yaml, e.g., "akaehomen321/time-api-app".
-   Often used alongside .Values.image.tag to pull the full image.
+#### `{{ include "chart.name" . }}`
+Useful for consistent naming across templates.
 
-{{- if .Values.serviceAccount.create }}
-   Conditional logic: this block is only rendered if serviceAccount.create is true in values.yaml
-   serviceAccountName: {{ include "timeapi.serviceAccountName" . }}
+---
 
+#### `{{ .Values.replicaCount }}`
+Reads the number of pod replicas from `values.yaml`.
+Used in the `.spec.replicas` field of the Deployment.
+
+---
+
+#### `{{ .Values.image.repository }}`
+Sets the container image repo from values.yaml, e.g., `"akaehomen321/time-api-app"`.
+Often used alongside .Values.image.tag to pull the full image.
+
+---
+
+#### `{{- if .Values.serviceAccount.create }}`
+Conditional logic: this block is only rendered if `serviceAccount.create` is `true` in `values.yaml`.
+serviceAccountName: {{ include "timeapi.serviceAccountName" . }}
+
+---
+
+#### `securityContext`
 securityContext:
   {{- toYaml .Values.podSecurityContext | nindent 8 }}
    Injects service account (if enabled).
    Sets pod-level security options, e.g., user ID, read-only root, etc.
 
-{{- toYaml .Values.resources | nindent 8 }}
-   Converts resources from values.yaml into valid YAML.
-   nindent 8 indents it correctly to match the surrounding manifest structure.
+---
 
+#### `{{- toYaml .Values.resources | nindent 8 }}`
+Converts resources from values.yaml into valid YAML.
+nindent 8 indents it correctly to match the surrounding manifest structure.
+
+---
+
+#### autoscaling
 {{- if not .Values.autoscaling.enabled }}
 replicas: {{ .Values.replicaCount }}
 {{- end }}
     Only sets replica count if autoscaling is disabled.
    .Values.replicaCount comes from values.yaml.
 
-All {{ .Values.* }} items come from the values.yaml file. They can be passed during during install/upgrade time.
--  command: helm install my-app-release ./time-api-chart/ -n time-api-app
-Helm will read your values.yaml, process all the templates, render them into final Kubernetes YAML, and apply them to your cluster in the correct namespace.
+---
+
+#### Where do the values come from?
+All {{ .Values.* }} items come from the values.yaml file. They can be passed during during install/upgrade time. Command: `helm install my-app-release ./time-api-chart/ -n time-api-app`. Helm will read your values.yaml, process all the templates, render them into final Kubernetes YAML, and apply them to your cluster in the correct namespace.
 
 ### 🔄 Flow: Templates + Values = Final YAML
 -  You define placeholders and logic in deployment.yaml.
