@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: my-timeapi-container
-          image: akaehomen321/time-api-app:main
+          image: akaehomen321/time-api-app:v1.0.2
           ports:
             - containerPort: 8000
           resources:
