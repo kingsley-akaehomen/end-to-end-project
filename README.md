@@ -15,7 +15,7 @@ This project contains a simple Python web application that displays current date
 Helm is a package manager for Kubernetes. Helm does the exact same thing for Kubernetes applications. This  FastAPI project consists of multiple Kubernetes resources (Deployments, Services, Secrets, PVCs). Helm bundles all of these into a single, manageable package called a Chart. 
 
 ### 🔧 Understanding `deployment.yaml`
-[When you run (helm create), Helm generates a default deployment.yaml under templates/. This file defines how the FastAPI app will   be   deployed to Kubernetes. Here’s a breakdown of key templating directives and how Helm uses them:
+When you run (helm create), Helm generates a default deployment.yaml under templates/. This file defines how the FastAPI app will   be   deployed to Kubernetes. Here’s a breakdown of key templating directives and how Helm uses them:
 
 {{ include "chart.name" . }}
    Useful for consistent naming across templates.
@@ -49,7 +49,7 @@ replicas: {{ .Values.replicaCount }}
 
 All {{ .Values.* }} items come from the values.yaml file. They can be passed during during install/upgrade time.
 -  command: helm install my-app-release ./time-api-chart/ -n time-api-app
-Helm will read your values.yaml, process all the templates, render them into final Kubernetes YAML, and apply them to your cluster in the correct namespace.]
+Helm will read your values.yaml, process all the templates, render them into final Kubernetes YAML, and apply them to your cluster in the correct namespace.
 
 ### 🔄 Flow: Templates + Values = Final YAML
 -  You define placeholders and logic in deployment.yaml.
